@@ -1,0 +1,20 @@
+from moviepy.editor import VideoFileClip, concatenate_videoclips
+
+file_input_1 = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_input_2 = r"D:\CloudMusic\MV\周深 - 小小.mp4"
+file_input_3 = r"D:\CloudMusic\MV\周深 - 东游 (电影《东游》同名主题曲).mp4"
+
+file_output = r"C:\Users\sss\Desktop\first_MV.avi"
+
+clip1 = VideoFileClip(file_input_1).subclip(60, 70)
+clip2 = VideoFileClip(file_input_3).subclip(50, 60)
+clip3 = VideoFileClip(file_input_2).subclip(80, 90)
+
+# crop对视频播放区域进行剪辑
+# vfc.crop(x_center=x_center, y_center=y_center, width=width, height=height)
+
+# 按顺序拼接 method=‘compose’是必要的，它使得各种编码方式不同的视频也可以进行拼接，否则，如果输入编码方式不同的视频会报错。
+finalclip = concatenate_videoclips([clip1, clip2, clip3], method="compose")
+# fps是帧
+
+finalclip.write_videofile(file_output, fps=25)
