@@ -1,0 +1,31 @@
+from moviepy.video.fx.resize import resize
+import moviepy.editor as mpy  # 干净，使用示例：mpy.VideoClip
+from moviepy.editor import VideoFileClip  # 只导入需要的
+from moviepy.editor import *
+
+file_input = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+
+jpeg = r"C:\Users\sss\Desktop\first.jpeg"
+png = r"C:\Users\sss\Desktop\t_2.jpg"
+
+clip = VideoFileClip(file_input)
+
+my_audio_clip = VideoFileClip(file_input).subclip(50, 100).resize(newsize=(1080, 720))
+
+# 对某一帧进行保存
+# clip.save_frame(jpeg)  # 保存第一帧
+# clip.save_frame(png, t=2)  # 保存2s时刻的那一帧
+
+# 展示某一帧
+# clip.show()  # 显示第一帧
+# clip.show(10.5)  # 显示 t = 10.5s
+# clip.show(10.5, interactive=True)  # 显示 t = 10.5s 并禁止，对屏幕点击可到的相应的属性数据
+
+
+# 一个clip可以按照下面的方式来预览
+clip.preview()  # 默认fps=15 预览
+# clip.preview(fps=25)
+# clip.preview(fps=15, audio=False)  # 不 生成/播放 音频
+# my_audio_clip.preview(fps=22000)  # fps太大，电脑配置太低，会出现卡顿
+
+# 使用 Pycharm 进行编译，不推荐使用 ipython
