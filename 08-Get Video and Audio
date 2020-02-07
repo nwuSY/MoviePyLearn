@@ -1,0 +1,24 @@
+from moviepy.editor import *
+
+filename = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_input = r"D:\CloudMusic\MV\周深 - 东游 (电影《东游》同名主题曲).mp4"
+file_avi = r"D:\CloudMusic\MV\Mine.avi"
+
+file_output = r"C:\Users\sss\Desktop\first_MV.mp4"
+file_audio_output = r"C:\Users\sss\Desktop\first_MV.mp3"
+
+# 从视频中提取声音
+clip = VideoFileClip(filename, audio=True)
+audio = clip.audio  # 切片出声音
+audio.write_audiofile(file_audio_output)  # 写出音频
+
+print(clip.duration)  # 视频总时间
+
+# 对视频去除声音，设置 audio=False
+video = VideoFileClip(file_input, audio=False)
+video = video.set_audio(audio)  # 设置音频，视频切片音频
+video.write_videofile(file_output)  # 写出视频
+
+# 直接将声音切片出来
+audioclip_mp3 = AudioFileClip(file_avi)
+audioclip_mp3.write_audiofile(r"C:\Users\sss\Desktop\audio.mp3")  # 写出音频
