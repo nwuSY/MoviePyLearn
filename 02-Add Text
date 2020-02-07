@@ -1,0 +1,23 @@
+# 导入需要的库
+from moviepy.editor import *
+
+file_input = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_output = r"C:\Users\sss\Desktop\first_MV.mp4"
+
+# 从本地载入视频myHolidays.mp4并截取00:00:50 - 00:00:60部分
+clip = VideoFileClip(file_input).subclip(50, 60)
+
+# 调低音频音量 (volume x 0.8)
+clip = clip.volumex(0.8)
+
+# 做一个txt clip. 自定义样式，颜色.
+txt_clip = TextClip("WSY", fontsize=50, color='white')
+
+# 文本clip在屏幕正中显示持续10秒
+txt_clip = txt_clip.set_pos('center').set_duration(10)
+
+# 把 text clip 的内容覆盖 video clip
+video = CompositeVideoClip([clip, txt_clip])
+
+# 把最后生成的视频导出到文件内
+video.write_videofile(file_output)
