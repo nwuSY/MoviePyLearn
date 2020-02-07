@@ -1,0 +1,51 @@
+from moviepy.editor import *
+from math import *
+
+# 特效的声音后期添加，推荐 avi 文件
+file_input = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_output = r"C:\Users\sss\Desktop\first_MV.avi"
+
+file = r"D:\CloudMusic\MV\Mine.avi"
+
+my_clip = VideoFileClip(file_input)
+my_clip.set_start(t=5)  # 没有做任何改变，修改会丢失
+my_new_clip = my_clip.set_start(t=5)  # 这样才对。moviepy中，修改过的clip要重新赋值给变量，修改才会被保存
+
+# 要求对音频无声音
+clip = (VideoFileClip(file)
+        .fx(vfx.resize, width=460)  # 尺寸变化，保持纵横比
+        .fx(vfx.speedx, 2)  # 2倍速
+        .fx(vfx.colorx, 0.5))  # 画面调暗
+# clip.preview()
+
+
+# 使用clip.fl_time修改clip的时间线，需要设置时间：set_duration
+modifiedClip1 = my_clip.fl_time(lambda t: 3 * t)
+modifiedClip1.set_duration(3).preview()
+modifiedClip2 = my_clip.fl_time(lambda t: 1 + sin(t))
+
+
+# 可以用clip.fl_image来修改一个clip的显示。接下来，将会把一个clip每一帧的绿色和蓝色通道转换
+# [0, 1, 2]对应R|G|B，改变数值即可改变对应的通道
+def invert_green_blue(image):
+    return image[:, :, [0, 2, 1]]
+
+
+modifiedClip = my_clip.fl_image(invert_green_blue)
+
+
+# modifiedClip.preview()
+
+
+def scroll(get_frame, t):
+    '''
+    这个函数返回：当前帧的一个‘区域’
+    上述所说的‘区域’的位置依赖于第二个参数，时间
+    '''
+    frame = get_frame(t)
+    frame_region = frame[int(t):int(t) + 360, :]
+    return frame_region
+
+
+modifiedClip = my_clip.fl(scroll)
+# modifiedClip.preview()
