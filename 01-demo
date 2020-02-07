@@ -1,0 +1,9 @@
+from moviepy.editor import *
+
+filename = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_input = r"D:\CloudMusic\MV\周深 - 东游 (电影《东游》同名主题曲).mp4"
+
+file_output = r"C:\Users\sss\Desktop\first_MV.mp4"
+
+clip = VideoFileClip(filename).rotate(180)
+clip.ipython_display(file_output, width=280)
