@@ -1,0 +1,63 @@
+from moviepy.editor import *
+
+# 本节内容无法配置声音，需要从新添加
+
+file_input_1 = r"D:\CloudMusic\MV\周深 - 请笃信一个梦.mp4"
+file_input_2 = r"D:\CloudMusic\MV\周深 - 小小.mp4"
+file_input_3 = r"D:\CloudMusic\MV\周深 - 东游 (电影《东游》同名主题曲).mp4"
+
+file_output = r"C:\Users\sss\Desktop\first_MV.avi"
+
+clip1 = VideoFileClip(file_input_1, audio=False)  # 添加边界
+clip2 = clip1.fx(vfx.mirror_x)  # x轴镜像
+clip3 = clip1.fx(vfx.mirror_y)  # y轴镜像
+clip4 = clip1.resize(0.6)  # 尺寸等比缩放0.6
+
+final_clip = clips_array([
+    [clip1, clip2],
+    [clip3, clip3]
+])
+# final_clip.resize(width=480).write_videofile(file_output, audio=False)
+
+MP_1 = VideoFileClip(file_input_1, audio=False).subclip(60, 70)
+MP_2 = VideoFileClip(file_input_2, audio=False).subclip(60, 70).resize(0.5)
+MP_3 = VideoFileClip(file_input_3, audio=False).subclip(60, 70).resize(0.25)
+
+# MP_3 叠加在 MP_2 叠加在 MP_1 上
+video_1 = CompositeVideoClip([MP_1, MP_2, MP_3])
+# video_1.preview()
+
+# set_start属性设置开始播放的时间，时间上是对剩余时间叠加
+video_2 = CompositeVideoClip([MP_1,  # starts at t=0
+                            MP_2.set_start(4),  # start at t=5s
+                            MP_3.set_start(8)])  # start at t=9s
+
+# crossfadein添加淡入淡出效果
+video_3 = CompositeVideoClip([MP_1,  # starts at t=0
+                            MP_2.set_start(5).crossfadein(1),
+                            MP_3.set_start(9).crossfadein(1.5)])
+
+# 设置位置 set_pos 属性
+video_4 = CompositeVideoClip([MP_1,
+                            MP_2.set_pos((45, 150)),
+                            MP_3.set_pos((90, 100))])
+
+movie = VideoFileClip(file_input_1)
+movie1 = movie.set_pos((200, 200))  # x=45, y=150 , in pixels
+# movie1.preview()
+
+movie.set_pos("center")  # automatically centered
+
+# clip2 is horizontally centered, and at the top of the picture
+movie.set_pos(("center", "top"))
+
+# clip2 is vertically centered, at the left of the picture
+movie.set_pos(("left", "center"))
+
+# clip2 is at 40% of the width, 70% of the height of the screen:
+movie.set_pos((0.4, 0.7), relative=True)
+
+# clip2's position is horizontally centered, and moving down !
+movie_final = movie.set_pos(lambda t: ('center', t))
+movie_final.preview()
+
