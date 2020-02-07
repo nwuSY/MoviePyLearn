@@ -1,0 +1,93 @@
+from moviepy.editor import *
+import numpy as np
+
+imageList = ['D:\\360Downloads\\wpcache\\srvsetwp\\1001848.jpg', 'D:\\360Downloads\\wpcache\\srvsetwp\\1001851.jpg',
+             'D:\\360Downloads\\wpcache\\srvsetwp\\1001856.jpg', 'D:\\360Downloads\\wpcache\\srvsetwp\\1001858.jpg',
+             'D:\\360Downloads\\wpcache\\srvsetwp\\1001860.jpg', 'D:\\360Downloads\\wpcache\\srvsetwp\\1001887.jpg']
+
+image = 'D:\\360Downloads\\wpcache\\srvsetwp\\1001848.jpg'
+
+output = r"C:\Users\sss\Desktop\pic_mix.mp4"
+
+input_file = r"D:\CloudMusic\MV\周深 - 东游 (电影《东游》同名主题曲).mp4"
+
+# VIDEO CLIPS
+# lambda 是在需要一个函数，但是又不想费神去命名一个函数的场合下使用，也就是指匿名函数
+
+# clip_1 = VideoClip(make_frame, duration=4) # 自定义动画格式
+# clip_2 = VideoFileClip("my_vedio_file.mp4")  # 将视频读取到内存，文件格式还可以是avi、webm、 gif等
+
+# clip_3 = ImageSequenceClip(imageList, fps=25)  # 将图片列表转为视频
+
+# clip_4 = ImageClip(image)  # 文件格式还可以是 png、tiff等|自定义图片【读取图片】
+
+# clip_5 = TextClip('Hello!', font="Amiri-Bold", fontsize=70, color='black')  # 创建一个字幕
+
+# clip_6 = ColorClip(size=(460, 380), color=["R", "G", "B"])  # 创建颜色
+
+# AUDIO CLIPS
+# clip_7 = AudioFileClip("my_audio_file.mp3")  # 文件格式还可以是ogg、wav或者也可以是一个vedio
+# clip_8 = AudioArrayClip(numpy_array, fps=44100)  # 一个numpy数组
+
+# clip_9 = AudioClip(make_frame, duration=3)  # 使用一个方法make_frame(t)|创建音频，时长为 3s
+
+"""
+# 官方案例：使用 make_frame 形式大致如此
+# All you need is to define a function make_frame(t) which returns a HxWx3 numpy array (of 8-bits integers) representing the frame at time t
+
+import gizeh
+import moviepy.editor as mpy
+
+
+def make_frame(t):
+    surface = gizeh.Surface(128, 128)  # width, height
+    radius = W * (1 + (t * (2 - t)) ** 2) / 6  # the radius varies over time
+    circle = gizeh.circle(radius, xy=(64, 64), fill=(1, 0, 0))
+    circle.draw(surface)
+    return surface.get_npimage()  # returns a 8-bit RGB array
+
+
+clip = mpy.VideoClip(make_frame, duration=2)  # 2 seconds
+clip.write_gif(r"C:\\Users\\sss\\Desktop\\circle.gif", fps=15)
+"""
+
+# VideoFileClip
+myclip = VideoFileClip(input_file)
+print(myclip.fps)  # prints for instance '25.0'
+# Now cut the clip between t=10 and 25 secs. This conserves the fps.
+myclip2 = myclip.subclip(20, 23)
+# myclip2.write_gif(r"C:\Users\sss\Desktop\test.gif")  # the gif will have 30 fps
+
+clip = ImageSequenceClip("D:\编程\python\PIL\照片", fps=5, load_images=True)  # fps越小，播放越慢|设置了load_images后可放入图片的文件夹进行读取
+# clip.write_gif(r"C:\Users\sss\Desktop\pic.gif")
+
+# ImageClip 使用方法：1、使用已有图片    2、使用已有数组    3、视频切片
+# myclip = ImageClip("some_picture.jpeg")
+# myclip = ImageClip(somme_array) # a (height x width x 3) RGB numpy array
+
+imageclip = myclip.to_ImageClip(t="00:01:00")  # frame at t=1 hour|提取图片
+# imageclip.set_duration(3).preview()
+
+# TextClip
+# textclip = TextClip("Hello", font='Amiri-Bold')  # 制作文本剪辑的方式
+# TextClip.search('Amiri', 'fonts')  # Returns all font names containing Amiri
+# 如果您需要带有轮廓的小文本，则最好生成一个大文本，然后将其缩小
+strokeclip = TextClip("Hello", fontsize=70, stroke_width=5).resize(height=15)
+# strokeclip.set_duration(5).preview()
+
+# Mask Clips
+# make_maskclip = VideoClip(makeframe, duration=4, ismask=True)  # 制作 Video 时设置蒙版
+image_maskclip = ImageClip(image, ismask=True).resize((860, 540))  # 添加蒙版会变成灰度图
+# image_maskclip.set_duration(5).preview()
+
+video_maskclip = VideoFileClip(input_file).set_mask(image_maskclip)  # 设置蒙版，制作方式多样
+# video_maskclip.set_duration(5).preview()
+
+use_image = ImageClip(image, transparent=True)  # True is the default
+print(use_image.mask)  # <- the alpha layer of the picture.
+
+to_mask_video = VideoFileClip(input_file).to_mask()
+# to_mask_video.set_duration(5).preview()  # 生成灰白的video
+
+rgb_video = to_mask_video.to_RGB()
+rgb_video.set_duration(5).preview()
