@@ -1,5 +1,5 @@
 # MoviePyLearn
-A WAY TO CLIP VIDEOS
+WAY TO CLIP VIDEOS
 
 配置moviepy库的版本为1.0.0，安装方式pip install moviepy==1.0.0
 注：一定要配置该版本，否则会有bug
